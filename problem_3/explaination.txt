@@ -1,0 +1,38 @@
+1. "cnp" is a asynchronous buffered channel that can transmit objects of type func()
+    with buffer value of 10 which means it can hold 10 elements of type func(),
+    channels are used to send and receive data from two concurrent programs,
+    channel send and receive operations are atomic.
+    The for loop iterates 4 times spawning 4 goroutines that each do the same thing
+    execute f() when received.
+
+    "cnp <- func() {
+        fmt.Println("HERE1")
+    }"
+    "<-" operator is used to send and receive data to and from channel,
+    here a anonymous function which just prints "HERE1" is sent into the channel.
+
+
+2. This construct can be used for :=
+    i. Web servers, where multiple user's requests are processed concurrently.
+
+    ii. To render image, where the image can be broken into multiple equal sized parts
+        and each part can be give to a concurrent renderFunc().
+
+    iii. Work queue, where instead of sending data jobs or executable work can be sent.
+
+
+3. Each for loop iteration spawns a goroutine each running the same loop, when a object of type func()
+    is received and is immidiately executed as the for loop has 4 iteration it spawns 4 goroutines so
+    there are 6 more in the channel
+
+
+4. As channel is a reference type so we have to use make() to allocate memory for it,
+    cnp := make(chan func(), 10)
+    here make() creates a channel of type func() with 10 as buffer value, meaning it can store 10
+    elements of type func().
+    chan is the keyword used to declare variable of type channel.
+
+
+5. The reason "HERE1" is not printed is because the program exits right after executing the line 
+    "fmt.Println("Hello")" and there is no time for the Go runtime to process the channel receive
+    and for the goroutine to execute the incoming func() object/element.
